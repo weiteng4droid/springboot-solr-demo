@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.weiteng.modular.topic.mapper.TopicMapper">
+
+    <insert id="insert" parameterType="Topic" useGeneratedKeys="true" keyProperty="topicId" keyColumn="topic_id">
+        INSERT into topic (topic_content, score, create_time) VALUES (#{content}, #{score}, #{createTime});
+    </insert>
+
+    <select id="selectAll" resultType="Topic">
+        select topic_id as topicId, topic_content as content, score, create_time as createTime from topic
+    </select>
+
+    <insert id="batchInsertOptions" parameterType="TopicOption" >
+       INSERT INTO topic_option (option_id, option_code, option_content, topic_id)
+       VALUES
+           <foreach collection="options" separator="," item="option">
+               (#{option.optionId}, #{option.optionCode}, #{option.optionContent}, #{option.topicId})
+           </foreach>
+    </insert>
+
+    <insert id="insertTopicAnswer" parameterType="TopicAnswer">
+        INSERT INTO topic_answer (answer_content, topic_id, option_id, option_code)
+        VALUES (#{answerContent}, #{topicId}, #{optionId}, #{optionCode})
+    </insert>
+
+    <select id="queryTotalCount" resultType="int">
+        SELECT count(0) FROM topic;
+    </select>
+
+    <resultMap id="topicVoMap" type="TopicVO">
+        <id property="topicId" column="topic_id" javaType="Integer"/>
+        <result property="content" column="topic_content" javaType="string" />
+        <result property="score" column="score" javaType="integer" />
+        <result property="createTime" column="create_time" javaType="java.util.Date" />
+        <!-- 关联查询答案 -->
+        <association property="answer" javaType="me.weiteng.pojo.entity.TopicAnswer">
+            <id property="answerId" column="answer_id" javaType="integer"/>
+            <result property="answerContent" column="answer_content" javaType="string" />
+            <result property="topicId" column="answer_topic_id" javaType="integer" />
+            <result property="optionId" column="option_id" javaType="integer" />
+            <result property="optionCode" column="option_code" javaType="string" />
+            <result property="createTime" column="answer_create_time" javaType="java.util.Date" />
+            <result property="updateTime" column="answer_update_time" javaType="java.util.Date" />
+        </association>
+
+    </resultMap>
+
+    <resultMap id="topicVoMap2" type="TopicVO">
+        <id property="topicId" column="topic_id" javaType="Integer"/>
+        <result property="content" column="topic_content" javaType="string" />
+        <result property="score" column="score" javaType="integer" />
+        <result property="createTime" column="create_time" javaType="java.util.Date" />
+        <!-- 关联查询答案 -->
+        <collection property="options" ofType="me.weiteng.pojo.entity.TopicOption">
+            <id property="optionId" column="option_id" javaType="integer" />
+            <result property="optionCode" column="option_code" javaType="string" />
+            <result property="optionContent" column="option_content" javaType="string" />
+            <result property="topicId" column="topic_id" javaType="integer" />
+            <result property="createTime" column="top_create_time" javaType="java.util.Date" />
+        </collection>
+
+    </resultMap>
+
+    <resultMap id="topicAnswerResultMap" type="TopicAnswer">
+        <id property="answerId" column="answer_id" javaType="integer"/>
+        <result property="answerContent" column="answer_content" javaType="string" />
+        <result property="topicId" column="topic_id" javaType="integer" />
+        <result property="optionId" column="option_id" javaType="integer" />
+        <result property="optionCode" column="option_code" javaType="string" />
+        <result property="createTime" column="create_time" javaType="java.util.Date" />
+        <result property="updateTime" column="update_time" javaType="java.util.Date" />
+    </resultMap>
+
+    <resultMap id="topicOptionResultMap" type="TopicOption">
+        <id property="optionId" column="option_id" javaType="integer" />
+        <result property="optionCode" column="option_code" javaType="string" />
+        <result property="optionContent" column="option_content" javaType="string" />
+        <result property="topicId" column="topic_id" javaType="integer" />
+        <result property="createTime" column="option_create_time" javaType="java.util.Date" />
+        <result property="updateTime" column="option_update_time" javaType="java.util.Date" />
+    </resultMap>
+
+    <!-- 查询题目的sql片段 -->
+    <sql id="topicSql">
+        SELECT
+            t.*,
+            ta.answer_id,
+            ta.answer_content,
+            ta.topic_id as answer_topic_id,
+            ta.option_id,
+            ta.option_code,
+            ta.update_time as answer_create_time,
+            ta.update_time as answer_update_time
+        FROM topic t
+            LEFT JOIN topic_answer ta on ta.topic_id = t.topic_id
+    </sql>
+
+    <!-- 分页查询题目 -->
+    <select id="queryTopicByPage" resultMap="topicVoMap">
+        <include refid="topicSql" /> LIMIT #{start}, #{rows}
+    </select>
+
+    <!-- 查询所有题目 -->
+    <select id="queryTopicAndAnswers" resultMap="topicVoMap">
+        <include refid="topicSql" />
+    </select>
+
+    <!-- 查询一条记录 -->
+    <select id="queryTopicByTopicId" resultMap="topicVoMap">
+        <include refid="topicSql" />
+        where t.topic_id = #{topicId}
+    </select>
+
+    <!-- 查询题目对应的选项 -->
+    <select id="queryTopicOptions" resultMap="topicOptionResultMap">
+        SELECT * FROM topic_option WHERE topic_id = #{topicId};
+    </select>
+
+    <!-- 查询题目对应的答案 -->
+    <select id="queryTopicAnswer" resultMap="topicAnswerResultMap">
+        SELECT * FROM topic_answer WHERE topic_id = #{topicId}
+    </select>
+
+    <!-- 删除题目 -->
+    <delete id="deleteTopic" parameterType="Integer">
+        DELETE FROM topic WHERE topic_id = #{topicId}
+    </delete>
+
+    <!-- 删除答案 -->
+    <delete id="deleteAnswer" parameterType="Integer">
+        DELETE FROM topic_answer WHERE topic_id = #{topicId}
+    </delete>
+
+    <!-- 删除选项 -->
+    <delete id="deleteOptions" parameterType="Integer">
+        DELETE FROM topic_option WHERE topic_id = #{topicId}
+    </delete>
+
+    <!-- 修改题目 -->
+    <update id="updateTopic" parameterType="Topic">
+        UPDATE topic
+        <set>
+            <if test="content != null and content != ''">
+                topic_content = #{content}
+            </if>
+            <if test="score != null">
+                , score = #{score}
+            </if>
+        </set>
+        where topic_id = #{topicId}
+    </update>
+
+    <!-- 修改答案 -->
+    <update id="updateTopicAnswer" parameterType="TopicAnswer">
+        UPDATE topic_answer
+        <set>
+            <if test="optionId != null">
+                option_id = #{optionId}
+            </if>
+            <if test="optionCode != null and optionCode != ''">
+                , option_code = #{optionCode}
+            </if>
+            <if test="answerContent != null and answerContent != ''">
+                , answer_content = #{answerContent}
+            </if>
+        </set>
+        where topic_id = #{topicId}
+    </update>
+
+    <!-- 修改选项 -->
+    <update id="updateTopicOption" parameterType="TopicAnswer">
+        UPDATE topic_option
+        <set>
+            <if test="optionContent != null and optionContent != ''">
+                option_content = #{optionContent}
+            </if>
+        </set>
+        where option_id = #{optionId}
+    </update>
+
+    <!-- 查询所有的题目 -->
+    <select id="queryAllTopics" resultMap="topicVoMap2">
+        SELECT
+            t.*,
+            top.option_id,
+            top.option_code,
+            top.option_content,
+            top.create_time as top_create_time
+          FROM topic t LEFT JOIN topic_option top on top.topic_id = t.topic_id
+    </select>
+
+</mapper>

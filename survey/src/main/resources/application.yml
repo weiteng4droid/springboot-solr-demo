@@ -1,0 +1,43 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /survey
+
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://192.168.0.12:3306/survey?characterEncoding=UTF-8&autoReconnect=true&useSSL=false
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      initial-size: 5
+      min-idle: 1
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 30000
+      max-pool-prepared-statement-per-connection-size: 20
+  jackson:
+      default-property-inclusion: non_null
+      date-format: yyyy-MM-dd HH:mm:ss
+  freemarker:
+    check-template-location: true
+    expose-request-attributes: true
+    expose-session-attributes: true
+    request-context-attribute: request
+  data:
+    solr:
+      host: http://127.0.0.1:8080/solr
+
+logging:
+  level.root: info
+  level.me.weteing: debug
+#  path: /Users/weiTeng/javaEE/server-log/
+  path: /data/javaapps/develop/
+  file: survey.log
+
+mybatis:
+  type-aliases-package: me.weiteng.pojo
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    cache-enabled: true

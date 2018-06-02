@@ -1,0 +1,77 @@
+/*
+* @Author: Marte
+* @Date:   2017-03-17 15:33:07
+* @Last Modified by:   Marte
+* @Last Modified time: 2017-03-17 16:46:16
+*/
+
+html,
+body {
+	width: 100%;
+}
+
+body {
+	background: #f3f5f7;
+}
+
+.container {
+	width: 100%;
+	padding:10px;
+}
+.container .title{
+	width:100%;	
+}
+.container .title h2{
+	text-align: center;
+	font-size:0.6rem;
+	color:#0476CE;
+	padding:15px 0;
+}
+.container .content {
+	padding:5px;
+	
+}
+.container .content #details input{
+	width:0.4rem;
+	height:0.4rem;
+	
+}
+.container .content h3{
+	font-size:0.5rem;
+	padding:5px 0;
+}
+.container .content p{
+	font-size:0.5rem;
+	padding:8px 0;
+}
+.container #details {
+	background:#D9DFF0 ;
+	margin-bottom:10px;
+	
+}
+
+
+.container #message{
+	background:#F6B960 ;
+	padding:5px;
+}
+.container #message input {
+	box-sizing: content-box;
+	width: 75%;
+    height: 0.6rem;
+}
+.container .submit {
+	padding:5px;
+}
+.container .submit #submitData{
+	width:100%;
+	height:1.3rem;
+	font-size:0.6rem;
+	text-align: center;
+	line-height: 1.3rem;
+	background: #0476CE;
+	border-radius: 5px;
+	border:1px solid #ccc;
+	color:#fff;
+}
+

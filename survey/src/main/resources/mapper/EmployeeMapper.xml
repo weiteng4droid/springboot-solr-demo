@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.weiteng.modular.system.mapper.EmployeeMapper">
+
+    <insert id="insert" parameterType="Employee">
+        INSERT INTO employee (name, phone, sex, nickname, code, total_score) VALUES (#{name}, #{phone}, #{sex}, #{nickname}, #{code}, #{totalScore});
+    </insert>
+
+    <select id="queryTotalCount" resultType="int">
+        SELECT count(0) FROM employee;
+    </select>
+
+    <resultMap id="employeeMap" type="Employee">
+        <id property="id" column="id" javaType="Long"/>
+        <result property="name" column="name" javaType="string" />
+        <result property="phone" column="phone" javaType="string" />
+        <result property="sex" column="sex" javaType="Integer" />
+        <result property="nickname" column="nickname" javaType="string" />
+        <result property="deptName" column="dept_name" javaType="string" />
+        <result property="totalScore" column="total_score" javaType="integer" />
+        <result property="createTime" column="create_time" javaType="java.util.Date" />
+        <result property="updateTime" column="update_time" javaType="java.util.Date" />
+    </resultMap>
+
+    <select id="queryEmployees" resultMap="employeeMap">
+        SELECT e.*, d.name as dept_name FROM employee e
+            LEFT JOIN dept d on e.code = d.code
+        LIMIT #{start}, #{rows}
+    </select>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.weiteng.modular.system.mapper.DeptMapper">
+
+    <insert id="insertDept" parameterType="Dept">
+        INSERT into dept(name, code) VALUES (#{name}, #{code})
+    </insert>
+
+    <delete id="deleteDept" parameterType="integer" >
+        DELETE FROM dept WHERE id = #{deptId}
+    </delete>
+
+    <resultMap id="deptMap" type="Dept">
+        <id property="id" column="id" javaType="Long"/>
+        <result property="name" column="name" javaType="string" />
+        <result property="code" column="code" javaType="string" />
+        <result property="createTime" column="create_time" javaType="java.util.Date" />
+    </resultMap>
+
+    <select id="queryAllDepartment" resultMap="deptMap">
+        SELECT * FROM dept
+    </select>
+
+</mapper>
