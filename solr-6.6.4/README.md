@@ -1,5 +1,5 @@
 ## Solr
-> 为什么要引入Solr，它到底有什么优势。假想有这样一种情况，当我们在oracle去查询一些东西，无非是使用like或者join(当查询条件多，涉及的多表的话)这几种操作。当数据量大的时候，很难相信在大型数据库上去执行高速的查询，有以下两点原因：一是，数据库本身在性能上缺乏亮点，所以我们总提性能。二是，松散的文本，查询的话基本都是基于like，而join和like是数据库的性能杀手，与最求高效快速的理念相违背。所以我们需要一种和sql完全不同的数据检索方式，由此引出了solr。
+> 为什么要引入Solr，它到底有什么优势。假想有这样一种情况，当我们在oracle去查询一些东西，无非是使用like或者join(当查询条件多，涉及的多表的话)这几种操作。当数据量大的时候，很难相信在大型数据库上去执行高速的查询，有以下两点原因：一是，数据库本身在性能上缺乏亮点，所以我们总提性能。二是，松散的文本，查询的话基本都是基于like，而join和like是数据库的性能杀手，与最求高效快速的理念相违背。所以我们需要一种和sql完全不同的数据检索方式，由此引出了solr。Solr是一个高性能，采用Java5开发，基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。
 
 ## 搭建环境
 
@@ -17,7 +17,7 @@
 
 1. 下载Solr
 
-	[solr](#http://www-eu.apache.org/dist/lucene/solr/6.6.4/)下载地址
+	[solr](http://www-eu.apache.org/dist/lucene/solr/6.6.4/)下载地址
 
 2. 解压
 
@@ -145,7 +145,7 @@
 
 ## 配置中文分词器
 
-1. 下载适配于solr6.0+的[ik-analyzer-solr6](https://github.com/zxiaofan/ik-analyzer-solr6/releases)	
+1. 下载适配于solr6.0+的 [ik-analyzer-solr6](https://github.com/zxiaofan/ik-analyzer-solr6/releases)	
 
 2. 准备词库配置文件
 
@@ -177,7 +177,7 @@
   	</fieldType>
 	```
 
-4. 将`ext_stopword.dic`、`IKAnalyzer.cfg.xml`和`mydict.dic`放置到apache-tomcat-8.0.32/webapps/solr/WEB-INF/classes/下
+4. 将`ext_stopword.dic`、`IKAnalyzer.cfg.xml`和`mydict.dic`放置到apache-tomcat-8.0.32/webapps/solr/WEB-INF/classes/下，并将`ikanalyzer-6.6.1.jar`放到WEB-INF/lib下
 
 5. 重启solr
 
@@ -187,18 +187,3 @@
 
 	![分词器](./images/item_decoration_impl.gif)	
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

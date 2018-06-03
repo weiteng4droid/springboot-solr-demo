@@ -17,4 +17,4 @@ Solr单机版配置，以及springboot和solr集成
 
 ## survey 
 
-一个答题的小练习项目，使用SpringBoot搭建，集成solr做题目搜索
+搜索案例，使用SpringBoot搭建，集成solr做题目搜索
